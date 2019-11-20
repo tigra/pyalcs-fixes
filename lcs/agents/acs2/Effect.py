@@ -21,7 +21,7 @@ class Effect(PerceptionString):
         bool
             True if the effect part predicts a change, False otherwise
         """
-        return any(True for e in self if e != self.wildcard)
+        return any(e != self.wildcard for e in self)
 
     def is_specializable(self, p0: Perception, p1: Perception) -> bool:
         """

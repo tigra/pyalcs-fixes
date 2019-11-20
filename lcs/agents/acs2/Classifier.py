@@ -16,6 +16,9 @@ class Classifier:
     __slots__ = ['condition', 'action', 'effect', 'mark', 'q', 'r',
                  'ir', 'num', 'exp', 'talp', 'tga', 'tav', 'ee', 'cfg']
 
+    def as_dict(self):
+        return {slot:getattr(self, slot) for slot in self.__slots__}
+
     def __init__(self,
                  condition: Union[Condition, str, None]=None,
                  action: Optional[int]=None,

@@ -141,12 +141,13 @@ class ClassifiersList(TypedList):
 
     @staticmethod
     def apply_reinforcement_learning(action_set: ClassifiersList,
-                                     reward: int,
-                                     p: float,
+                                     reward: int,  # last reward
+                                     maxP: float,  # maxP
                                      beta: float,
                                      gamma: float) -> None:
         for cl in action_set:
-            rl.update_classifier(cl, reward, p, beta, gamma)
+            if cl.does_anticipate_change():
+                rl.update_classifier(cl, reward, maxP, beta, gamma)
 
     @staticmethod
     def apply_ga(time: int,
@@ -193,7 +194,8 @@ class ClassifiersList(TypedList):
 
             ga.delete_classifiers(
                 population, match_set, action_set,
-                len(unique_children), theta_as)
+                2, theta_as)
+                # len(unique_children), theta_as)
 
             # check for subsumers / similar classifiers
             for child in unique_children:

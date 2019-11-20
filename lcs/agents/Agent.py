@@ -112,17 +112,22 @@ class Agent:
             steps_in_trial, reward = func(env, steps, current_trial)
             steps += steps_in_trial
 
-            if current_trial % self.get_cfg().metrics_trial_frequency == 0:
+            metrics_trial_frequency = self.get_cfg().metrics_trial_frequency
+            if current_trial % metrics_trial_frequency == 0:
                 m = basic_metrics(current_trial, steps_in_trial, reward)
+                # print("basic metrics: %s" % m)
 
                 user_metrics = self.get_cfg().user_metrics_collector_fcn
                 if user_metrics is not None:
-                    m.update(user_metrics(self.get_population(), env))
+                    u = user_metrics(self.get_population(), env)
+                    # print('update %s with %s' % (m, u))
+                    m.update(u)
 
                 metrics.append(m)
 
             # Print last metric
-            if current_trial % 500 == 0:
+            metrics_log_frequency = self.get_cfg().metrics_log_frequency
+            if current_trial % metrics_log_frequency == 0:
                 logger.info(metrics[-1])
 
             current_trial += 1

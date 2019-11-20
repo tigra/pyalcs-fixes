@@ -84,18 +84,27 @@ def exploit(cll, all_actions: int) -> int:
     int
         action from the best classifier
     """
+
+    def dump_cls(cls):
+        return sorted([(cl.condition, cl.action, cl.effect, cl.fitness, cl.num, cl.fitness*cl.num) for cl in cls],
+                      key=lambda t: t[-1])
+
     best_classifier = None
     anticipated_change_cls = [cl for cl in cll
                               if cl.does_anticipate_change()]
+    # print(dump_cls(anticipated_change_cls))
 
     if len(anticipated_change_cls) > 0:
         best_classifier = max(anticipated_change_cls,
                               key=lambda cl: cl.fitness * cl.num)
+        # print(best_classifier)
 
     if best_classifier is not None:
         return best_classifier.action
 
-    return choose_random_action(all_actions)
+    random_action = choose_random_action(all_actions)
+    print("random: %s" % random_action)
+    return random_action
 
 
 def choose_latest_action(cll, all_actions: int) -> int:
@@ -169,7 +178,9 @@ def choose_action_from_knowledge_array(cll, all_actions: int) -> int:
         knowledge_array[_action] = agg_q / float(agg_num)
 
     by_quality = sorted(knowledge_array.items(), key=lambda el: el[1])
-    action = by_quality[0][0]
+    with_best_quality = [ki for ki in by_quality if ki[1] == by_quality[0][1]]
+    # action = by_quality[0][0]
+    action = random.choice([ki[0] for ki in with_best_quality])  # Or else there is a bias towards Left, Right, Up
 
     return action
 

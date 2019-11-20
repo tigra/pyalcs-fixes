@@ -25,7 +25,8 @@ class Configuration:
                  theta_ga: int=100,
                  theta_as: int=20,
                  mu: float=0.3,
-                 chi: float=0.8) -> None:
+                 chi: float=0.8,
+                 metrics_log_frequency=100) -> None:
         """
         Creates the configuration object used during training the ACS2 agent.
 
@@ -50,12 +51,14 @@ class Configuration:
         :param theta_as:
         :param mu:
         :param chi: GA crossover probability
+        :param metrics_log_frequency how often to write to log
         """
         self.classifier_length = classifier_length
         self.number_of_possible_actions = number_of_possible_actions
         self.classifier_wildcard = classifier_wildcard
         self.environment_adapter = environment_adapter
         self.metrics_trial_frequency = metrics_trial_frequency
+        self.metrics_log_frequency = metrics_log_frequency
         self.user_metrics_collector_fcn = user_metrics_collector_fcn
         self.do_ga = do_ga
         self.do_subsumption = do_subsumption
